@@ -1,6 +1,6 @@
 import webpack from "webpack";
 import CleanWebpackPlugin from "clean-webpack-plugin";
-
+import Dotenv from 'dotenv-webpack';
 
 export default {
   entry: [
@@ -28,7 +28,7 @@ export default {
     new CleanWebpackPlugin(["dist"]),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new DotenvPlugin({
+    new Dotenv({
       sample: './.env.default', 
       path: './.env'}
     )

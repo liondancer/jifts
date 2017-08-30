@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as loginActions from '../../actions/loginActions';
+import * as loginActions from '../../actions/logInActions';
+import LogInForm from './LogInForm';
 
 
 class LoginPage extends React.Component {
@@ -25,26 +26,6 @@ class LoginPage extends React.Component {
     );
   }
 }
-
-const LogInForm = ({ onLogin }) => {
-  return (
-    <div>
-      <p>Log In Page</p>
-      <div>
-        Google OAUTH 2
-      </div>
-      <form>
-        <input type="text" placeholder="Username" />
-        <input type="text" placeholder="Password"/>
-        <button type="button" onClick={ onLogin } >Log In</button>
-      </form>
-    </div>
-  );
-};
-
-LogInForm.propTypes = {
-  onLogin: PropTypes.func.isRequired
-};
 
 function mapStateToProps(state, ownProps) {
   return {

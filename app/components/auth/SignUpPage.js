@@ -1,59 +1,64 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as signUpActions from '../../actions/signupActions';
+import * as signUpActions from '../../actions/signUpActions';
+import SignUpForm from './SignUpForm';
 
 
 class SignUpPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    this.state = {};
+    this.state = {
+      passwordMatch: true,
+      passwordLength: true
+    };
     this.onSignUp = this.onSignUp.bind(this);
     this.onFormChange = this.onFormChange.bind(this);
   }
 
+  validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
   onFormChange(event) {
     event.preventDefault();
-    console.log(event.target.value);
     this.setState({
         [event.target.name]: event.target.value
     });
   }
 
+  checkPasswordLength(p) {
+    ( p.length > 7 && p.length < 31 ) ? this.setState({passwordLength: true}) : this.setState({passwordLength: false});
+  }
+
+  checkMatchinPasswords(p1, p2) {
+    (p1 === p2) ? this.setState({passwordMatch: true}) : this.setState({passwordMatch: false});
+  }
+
   onSignUp(event) {
     event.preventDefault();
-    this.props.actions.signUp(this.state);
+    console.log(event);
+    this.checkMatchinPasswords(this.state.password, this.state.repeatPassword);
+    this.checkPasswordLength(this.state.password);
+    if (this.state.passwordLength && this.state.passwordMatch) {
+      this.props.actions.signUp(this.state);
+    }
   }
 
   render () {
     return (
       <div>
-        <SignUpForm onFormChange={ this.onFormChange } onSignUp={ this.onSignUp } />
+        <SignUpForm
+          onFormChange={ this.onFormChange }
+          onSignUp={ this.onSignUp }
+          passwordMatch={ this.state.passwordMatch }
+          passwordLength={ this.state.passwordLength }
+        />
       </div>
     );
   }
 }
-
-const SignUpForm = ({ onSignUp, onFormChange }) => {
-  return (
-    <div>
-      <form onChange={ onFormChange }>
-        <input type="text" placeholder="Email" name="email" />
-        <input type="text" placeholder="Username" name="username" />
-        <input type="text" placeholder="First Name" name="firstname" />
-        <input type="text" placeholder="Last Name" name="lastname" />
-        <input type="password" placeholder="Password" name="password" />
-        {/*<input type="password" placeholder="Repeat Password" name="repeat" />*/}
-        <button type="button" onClick={ onSignUp }>Sign Up</button>
-      </form>
-    </div>
-  );
-};
-
-SignUpForm.propTypes = {
-  onSignUp: PropTypes.func.isRequired,
-  onFormChange: PropTypes.func.isRequired
-};
 
 SignUpPage.propTypes = {
   actions: PropTypes.object.isRequired

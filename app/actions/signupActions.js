@@ -20,25 +20,18 @@ export function signupFailure(payload) {
   };
 }
 
-export function signUp(cred) {
-  return function (dispatch) {
+export function signUp(credentials) {
+  return dispatch => {
+    console.log("Creds");
+    console.log(credentials);
     $.ajax({
       method: 'POST',
-      dataType: 'JSON',
+      dataType: 'json',
       url: api.SIGNUP_ENDPOINT,
-      data: {
-        cred
-      },
+      data: credentials,
       success: payload => {
         console.log(payload);
-        // switch (payload.type) {
-        //   case api.success:
-        //     console.log("success");
-        //     return {};
-        //   default:
-        //     console.log("default");
-        //     return {};
-        // }
+
       },
       error: paylaod => {
         return dispatch(signupFailure());
